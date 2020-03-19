@@ -15,24 +15,20 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		requestTodo: (state, param) => {
-			axiosTodo.get(`/todo.json?orderBy="creator"&equalTo="${param.creator}"`)
+			axiosTodo.get(`/todo/creator/${param.creator}`)
 				.then(response => {
-					state.todoList = []
-					for (var key in response.data) {
-						response.data[key].id = key
-						state.todoList.push(response.data[key])
-					}
+					state.todoList = response.data
 				})
 		},
 		updateTodo: (state, param) => {
-			axiosTodo.patch(`/todo/${param.id}.json`, param.patch)
+			axiosTodo.patch(`/todo/${param.id}`, param.patch)
 				.then(
 					result => {
 						console.log(result)
 					})
 		},
 		addTodo: (state, param) => {
-			axiosTodo.post('/todo.json', param)
+			axiosTodo.post('/todo', param)
 				.then(
 					result => {
 						param.id = result.data.name
@@ -40,7 +36,7 @@ export default new Vuex.Store({
 					})
 		},
 		deleteTodo: (state, param) => {
-			axiosTodo.delete(`/todo/${param.id}.json`)
+			axiosTodo.delete(`/todo/${param.id}`)
 				.then(
 					result => {
 						state.todoList = state.todoList.filter(function (value, index, arr) {
